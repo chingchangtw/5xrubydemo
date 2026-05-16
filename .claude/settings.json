@@ -1,12 +1,14 @@
 {
+  "includeGitInstructions": false,
   "permissions": {
     "allow": [
       "Read(//Users/ctony/.claude/**)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git status)",
-      "Bash(git log --oneline )",            
-      "Bash(git push *)"
+      "Bash(git log --oneline )",
+      "Bash(git push *)",
+      "Write(src/**)"
     ]
   }
 }

@@ -2,3 +2,19 @@
 openspec/.vector-search.db*
 .env
 .claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+src/backend/dev.db
+
+# Node / Next.js
+node_modules/
+src/frontend/.next/
+src/frontend/out/
+
+# macOS
+.DS_Store
