@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achievement Gallery</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface-hover: #222535;
+      --border: #2a2d3e;
+      --accent-pro: #6366f1;
+      --accent-proj: #10b981;
+      --accent-hobby: #f59e0b;
+      --text: #e2e8f0;
+      --text-muted: #8892a4;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 48px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, #1e2040 0%, transparent 70%);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #e2e8f0 30%, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      margin-top: 12px;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* ── Filters ── */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 0 24px 40px;
+    }
+    .filter-btn {
+      padding: 7px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .filter-btn:hover { border-color: #4a4d6e; color: var(--text); }
+    .filter-btn.active {
+      background: var(--surface-hover);
+      border-color: #4a4d6e;
+      color: var(--text);
+    }
+    .filter-btn[data-cat="professional"].active { border-color: var(--accent-pro); color: var(--accent-pro); }
+    .filter-btn[data-cat="project"].active      { border-color: var(--accent-proj); color: var(--accent-proj); }
+    .filter-btn[data-cat="hobby"].active        { border-color: var(--accent-hobby); color: var(--accent-hobby); }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
+    .card[data-cat="professional"]:hover { border-color: var(--accent-pro); }
+    .card[data-cat="project"]:hover      { border-color: var(--accent-proj); }
+    .card[data-cat="hobby"]:hover        { border-color: var(--accent-hobby); }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .card-icon {
+      font-size: 2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .badge-professional { background: #1e1e4a; color: var(--accent-pro); }
+    .badge-project      { background: #0d2b20; color: var(--accent-proj); }
+    .badge-hobby        { background: #2b1f08; color: var(--accent-hobby); }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .card-date {
+      font-size: 0.78rem;
+      color: #4a5568;
+      margin-top: 4px;
+    }
+
+    /* ── Hide ── */
+    .card.hidden { display: none; }
+
+    /* ── Empty state ── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 0;
+      color: var(--text-muted);
+      display: none;
+    }
+    .empty.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <h1>My Achievement Gallery</h1>
+  <p>A collection of milestones, projects, and moments I'm proud of.</p>
+</section>
+
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="professional">Professional</button>
+  <button class="filter-btn" data-cat="project">Projects</button>
+  <button class="filter-btn" data-cat="hobby">Hobbies &amp; Life</button>
+</div>
+
+<main class="grid" id="grid">
+
+  <!-- ── Professional ── -->
+  <div class="card" data-cat="professional">
+    <div class="card-top">
+      <span class="card-icon">🏆</span>
+      <span class="badge badge-professional">Professional</span>
+    </div>
+    <h3>Promoted to Senior Engineer</h3>
+    <p>Led the migration of a monolithic backend to microservices, cutting deployment time by 60%.</p>
+    <span class="card-date">March 2024</span>
+  </div>
+
+  <div class="card" data-cat="professional">
+    <div class="card-top">
+      <span class="card-icon">📜</span>
+      <span class="badge badge-professional">Professional</span>
+    </div>
+    <h3>AWS Solutions Architect Certified</h3>
+    <p>Passed the SAA-C03 exam on the first attempt after three months of self-study.</p>
+    <span class="card-date">November 2023</span>
+  </div>
+
+  <div class="card" data-cat="professional">
+    <div class="card-top">
+      <span class="card-icon">🎤</span>
+      <span class="badge badge-professional">Professional</span>
+    </div>
+    <h3>Conference Speaker</h3>
+    <p>Gave a 30-minute talk on distributed tracing at a regional developer conference (500+ attendees).</p>
+    <span class="card-date">June 2023</span>
+  </div>
+
+  <!-- ── Projects ── -->
+  <div class="card" data-cat="project">
+    <div class="card-top">
+      <span class="card-icon">🚀</span>
+      <span class="badge badge-project">Project</span>
+    </div>
+    <h3>Open-Source CLI Tool — 800 ⭐</h3>
+    <p>Built a developer productivity tool in Go that reached 800 GitHub stars within six months of launch.</p>
+    <span class="card-date">January 2024</span>
+  </div>
+
+  <div class="card" data-cat="project">
+    <div class="card-top">
+      <span class="card-icon">🤖</span>
+      <span class="badge badge-project">Project</span>
+    </div>
+    <h3>AI Journaling App</h3>
+    <p>Shipped a mobile-first journaling app powered by Claude API. 200+ active users in the first week.</p>
+    <span class="card-date">August 2024</span>
+  </div>
+
+  <div class="card" data-cat="project">
+    <div class="card-top">
+      <span class="card-icon">🌐</span>
+      <span class="badge badge-project">Project</span>
+    </div>
+    <h3>Personal Blog — 10 k Monthly Readers</h3>
+    <p>Wrote consistently for two years; reached 10,000 monthly readers without paid promotion.</p>
+    <span class="card-date">December 2023</span>
+  </div>
+
+  <!-- ── Hobbies & Life ── -->
+  <div class="card" data-cat="hobby">
+    <div class="card-top">
+      <span class="card-icon">🏃</span>
+      <span class="badge badge-hobby">Hobbies &amp; Life</span>
+    </div>
+    <h3>First Marathon Finished</h3>
+    <p>Completed the city marathon in 4h 12m after six months of training — a goal I'd deferred for years.</p>
+    <span class="card-date">October 2023</span>
+  </div>
+
+  <div class="card" data-cat="hobby">
+    <div class="card-top">
+      <span class="card-icon">🌏</span>
+      <span class="badge badge-hobby">Hobbies &amp; Life</span>
+    </div>
+    <h3>Solo Trip Across Southeast Asia</h3>
+    <p>Spent five weeks travelling through Vietnam, Thailand, and Japan — planned every leg independently.</p>
+    <span class="card-date">February 2024</span>
+  </div>
+
+  <div class="card" data-cat="hobby">
+    <div class="card-top">
+      <span class="card-icon">🎸</span>
+      <span class="badge badge-hobby">Hobbies &amp; Life</span>
+    </div>
+    <h3>Performed Live on Stage</h3>
+    <p>Played a 20-minute guitar set at a local open-mic night after two years of lessons.</p>
+    <span class="card-date">May 2023</span>
+  </div>
+
+  <div class="empty" id="empty">No achievements in this category yet.</div>
+
+</main>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.card[data-cat]');
+  const empty = document.getElementById('empty');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cat = btn.dataset.cat;
+      let visible = 0;
+
+      cards.forEach(card => {
+        const show = cat === 'all' || card.dataset.cat === cat;
+        card.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+
+      empty.classList.toggle('visible', visible === 0);
+    });
+  });
+</script>
+
+</body>
+</html>
